@@ -1,0 +1,237 @@
+<div class="container mt-3">
+  <div class="card p-2">
+    <div class="row">
+      <div class="col-6">
+        <form [formGroup]="bookForm" novalidate (ngSubmit)="saveBook()">
+          <mat-form-field class="w-100">
+            <mat-label>Book Title: </mat-label>
+            <input matInput placeholder="book title" formControlName="title" />
+            <!-- input field hint -->
+            <mat-hint align="end">
+              Can contain only characters. Maximum
+            </mat-hint>
+            <!-- input field error -->
+            <mat-error *ngIf="bookForm.controls.title.invalid">
+              <span [hidden]="!bookForm.controls['title'].errors.required">
+                This field is required.
+              </span>
+              <span [hidden]="!bookForm.controls['title'].errors.maxlength">
+                Maximmum alowed charactes are 100
+              </span>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="w-100">
+            <mat-label>Book Author: </mat-label>
+            <input
+              matInput
+              placeholder="book author"
+              appearance="outline"
+              formControlName="author"
+            />
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Book Publisher: </mat-label>
+            <input
+              matInput
+              placeholder="book publisher"
+              appearance="outline"
+              formControlName="publisher"
+            />
+          </mat-form-field>
+
+          <mat-form-field style="margin-right: 2%" class="w-48">
+            <mat-label>Price: </mat-label>
+            <input
+              matInput
+              placeholder="The Book's Actual Price"
+              formControlName="price"
+            />
+          </mat-form-field>
+          <mat-form-field style="margin-left: 2%" class="w-48">
+            <mat-label>Quantity: </mat-label>
+            <input matInput placeholder="quantity" formControlName="quantity" />
+          </mat-form-field>
+
+          <mat-form-field style="margin-right: 2%" class="w-48">
+            <mat-label>ISBN10: </mat-label>
+            <input matInput placeholder="ISBN10" formControlName="isbn10" />
+          </mat-form-field>
+          <mat-form-field style="margin-left: 2%" class="w-48">
+            <mat-label>ISBN13: </mat-label>
+            <input matInput placeholder="ISBN13" formControlName="isbn13" />
+          </mat-form-field>
+
+          <mat-form-field style="margin-right: 2%" class="w-48">
+            <mat-label>Signed By ...</mat-label>
+            <input
+              matInput
+              placeholder="Signed By ..."
+              formControlName="signed"
+            />
+          </mat-form-field>
+          <div>
+            <mat-label>Edition: </mat-label>
+            <app-custom-stepper
+              formControlName="edition"
+              class="w-100"
+            ></app-custom-stepper>
+          </div>
+
+          <mat-form-field style="margin-right: 2%" class="w-48 mt-3">
+            <mat-label>Binding Type:</mat-label>
+            <mat-select formControlName="bindingType">
+              @for (bindingType of bindingTypes; track bindingType) {
+              <mat-option [value]="bindingType.value">{{
+                bindingType.viewValue
+              }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field style="margin-left: 2%" class="w-48">
+            <mat-label>Book Condition:</mat-label>
+            <mat-select formControlName="bookCondition">
+              @for (condition of bookConditions; track condition) {
+              <mat-option [value]="condition.value">{{
+                condition.viewValue
+              }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>GoodReads Rating:</mat-label>
+            <mat-select formControlName="goodReadsRating">
+              @for (rating of goodRatings; track rating) {
+              <mat-option [value]="rating.value">{{
+                rating.viewValue
+              }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field style="margin-left: 2%" class="w-48">
+            <input
+              matInput
+              placeholder="Publication Date"
+              [matDatepicker]="publicationDatePicker"
+              formControlName="publicationDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="publicationDatePicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #publicationDatePicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-checkbox class="" formControlName="enabled"
+            >Enabled</mat-checkbox
+          >
+          <mat-form-field
+            appearance="outline"
+            class="d-flex justify-content-center"
+          >
+            <mat-label>book's Category</mat-label>
+            <mat-select
+              placeholder="Select book's category"
+              formControlName="categoryId"
+            >
+              <mat-option
+                *ngFor="let ctgory of clistForNewBook"
+                [value]="ctgory.id"
+                >{{ ctgory.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field
+            appearance="outline"
+            class="d-flex justify-content-center"
+          >
+            <mat-label>Book Store</mat-label>
+            <mat-select
+              placeholder="Select the store in the list"
+              formControlName="storeId"
+            >
+              <mat-option
+                *ngFor="let store of storeListForNewBook"
+                [value]="store.id"
+                >{{ store.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>About This Item:</mat-label>
+            <textarea
+              matInput
+              placeholder="Description of this item"
+              formControlName="aboutThisItem"
+            ></textarea>
+          </mat-form-field>
+
+          <div align="end">
+            <button
+              mat-stroked-button
+              color="primary"
+              style="margin-right: 3px"
+            >
+              Clear
+            </button>
+            <button
+              *ngIf="isNewBook"
+              mat-stroked-button
+              color="primary"
+              type="submit"
+              [disabled]="bookForm.invalid || tempImages.length == 0"
+            >
+              Add Book
+            </button>
+            <button
+              *ngIf="!isNewBook"
+              mat-stroked-button
+              color="primary"
+              type="submit"
+              [disabled]="bookForm.invalid || tempImages.length == 0"
+            >
+              Update Book
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="col-6">
+        <div class="dropzone" appDrag (files)="fileDropped($event)">
+          <div class="text-wrapper">
+            <div class="centered">
+              Drag and Drop your image file here or
+              <a class="browse-button" (click)="selectFile.click()">browse</a> a
+              file.
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <input
+            multiple
+            style="display: none"
+            type="file"
+            #selectFile
+            value="select"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+        <div class="mt-5">
+          <div class="row">
+            <mat-grid-list cols="4" rowHeight="1:1">
+              <mat-grid-tile *ngFor="let image of tempImages; let i = index">
+                <div style="position: relative">
+                  <span class="btn-remove-image" (click)="removeImages(i)"
+                    >x</span
+                  >
+                  <img [src]="image.url" width="150px" height="150px" />
+                </div>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,7 @@ import {
   MatDialogClose,
   MatDialogTitle,
   MatDialogContent,
+  MatDialogConfig,
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { Category } from '../../category';
@@ -16,21 +17,4 @@ import { Category } from '../../category';
   styleUrl: './confirm-dialog.component.css'
 })
 export class ConfirmDialogComponent {
-  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAnimationsExampleDialog>) { }
-
-  openDialog(category: Category, enterAnimationDuration: string, exitAnimationDuration: string): void {
-    this.dialog.open(DialogAnimationsExampleDialog, {
-      width: '400px',
-      enterAnimationDuration,
-      exitAnimationDuration,
-    });
-  }
-}
-@Component({
-  selector: 'dialog-animations-example-dialog',
-  templateUrl: './confirm-dialog.component.html',
-  imports: [MatButtonModule, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent],
-})
-export class DialogAnimationsExampleDialog {
-  constructor(public dialogRef: MatDialogRef<DialogAnimationsExampleDialog>) { }
 }

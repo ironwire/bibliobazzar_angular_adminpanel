@@ -1,14 +1,21 @@
-<mat-toolbar class="mat-elevation-z3">
+<mat-toolbar class="mat-elevation-z3" *ngIf="isLoggedIn()">
   <button mat-icon-button (click)="collapsed.set(!collapsed())">
     <mat-icon>menu</mat-icon>
   </button>
+  <button mat-icon-button (click)="logout()" class="ms-auto">
+    <mat-icon>logout</mat-icon><span>Logout</span>
+  </button>
 </mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav opened mode="side" [style.width]="sidenavWidth()">
+  <mat-sidenav
+    opened
+    mode="side"
+    [style.width]="sidenavWidth()"
+    *ngIf="isLoggedIn()"
+  >
     <app-custom-sidenav [collapsed]="collapsed()" />
   </mat-sidenav>
   <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
-    Hello Lixiaodong
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

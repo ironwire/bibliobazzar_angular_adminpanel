@@ -1,0 +1,21 @@
+<div class="slides">
+    <div class="slide" 
+        
+    ><img [src]="slides[currentSlide].url" width="700" height="600"></div>
+    @if(indicatiorsVisible){
+    <div id="indicators">
+        @for (slide of slides; track $index) {
+        <div (click)="jumpToSlide($index)" class="indicator" [ngClass]="{ active: $index == currentSlide}"></div>
+        }
+
+    </div>
+    }
+    <button (click)="next()">
+        <mat-icon class="nextButton">chevron_right</mat-icon>
+    </button>
+
+    <button (click)="previous()">
+        <mat-icon class="previousButton">chevron_left</mat-icon>
+    </button>
+
+</div>

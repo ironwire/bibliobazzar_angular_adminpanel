@@ -6,16 +6,26 @@ import { BookSellersComponent } from './pages/book-sellers/book-sellers.componen
 import { CustomersComponent } from './pages/customers/customers.component';
 import { BookOrdersComponent } from './pages/book-orders/book-orders.component';
 import { UsersComponent } from './pages/users/users.component';
+import { LoginComponent } from './components/login/login.component';
+import { authGuard } from './_auth/auth.guard';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'book'
+    redirectTo: 'book',
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: 'book',
-    component: BookComponent,
+    loadChildren: () =>
+      import('./modules/product/product.module').then((c) => c.ProductModule),
+    canActivate: [authGuard],
+    data: { roles: ['BookAdmin', 'Admin'] },
   },
   {
     path: 'bookSellers',
@@ -31,15 +41,27 @@ const routes: Routes = [
   },
   {
     path: 'users',
-    component: UsersComponent
+    component: UsersComponent,
+    canActivate: [authGuard],
+    data: { roles: ['User'] },
   },
-  { path: 'category', loadChildren: () => import('./modules/category/category.module').then((c) => c.CategoryModule) }
+  {
+    path: 'category',
+    loadChildren: () =>
+      import('./modules/category/category.module').then(
+        (c) => c.CategoryModule
+      ),
+    canActivate: [authGuard],
+    data: { roles: ['CateAdmin'] },
+  },
+  {
+    path: 'forbidden',
+    component: ForbiddenComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule {
-
-}
+export class AppRoutingModule {}

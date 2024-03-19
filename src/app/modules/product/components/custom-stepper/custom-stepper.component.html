@@ -1,0 +1,5 @@
+<div class="stepper">
+    <button type="button" (click)="decrement()">-</button>
+    <input type="number" [(ngModel)]="editionValue" (input)="updateValue(editionValue)" />
+    <button type="button" (click)="increment()">+</button>
+</div>

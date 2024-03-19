@@ -1,13 +1,20 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { CustomSidenavComponent } from './components/custom-sidenav/custom-sidenav.component';
 import { MatListModule } from '@angular/material/list';
 import { BookCategoryComponent } from './pages/book-category/book-category.component';
@@ -18,14 +25,19 @@ import { BookOrdersComponent } from './pages/book-orders/book-orders.component';
 import { UsersComponent } from './pages/users/users.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CategoryService } from './services/category.service';
-import { MatTableModule } from '@angular/material/table';
+
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './common/components/confirm-dialog/confirm-dialog.component';
-
-
-
+import { DatePipe } from '@angular/common';
+import { ImagesliderComponent } from './common/components/imageslider/imageslider.component';
+import { LoginComponent } from './components/login/login.component';
+import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
+import { RouterModule } from '@angular/router';
+import { authGuard } from './_auth/auth.guard';
+import { AuthInterceptor } from './_auth/auth.interceptor';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +50,9 @@ import { ConfirmDialogComponent } from './common/components/confirm-dialog/confi
     BookOrdersComponent,
     UsersComponent,
     ConfirmDialogComponent,
+    ImagesliderComponent,
+    LoginComponent,
+    ForbiddenComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,11 +66,25 @@ import { ConfirmDialogComponent } from './common/components/confirm-dialog/confi
     MatFormFieldModule,
     MatInputModule,
     HttpClientModule,
-    MatTableModule,
-    MatDialogModule
+    MatDialogModule,
+    FormsModule,
+    MatCard,
+    MatCardTitle,
+    MatCardContent,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
   ],
-  providers: [CategoryService],
-  bootstrap: [AppComponent],
 
+  providers: [
+    CategoryService,
+    DatePipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
