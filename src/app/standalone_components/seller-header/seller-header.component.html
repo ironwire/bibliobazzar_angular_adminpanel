@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <button
+    class="btn btn-secondary m-3"
+    mat-raised-button
+    routerLink="./seller_register"
+    (scroll)="onscroll()"
+    [ngClass]="navbarfixed ? 'fixed' : 'nofixed'"
+  >
+    Seller Register
+  </button>
+  <button
+    class="btn btn-secondary"
+    mat-raised-button
+    routerLink="./seller_update"
+  >
+    Seller Update
+  </button>
+</mat-toolbar>

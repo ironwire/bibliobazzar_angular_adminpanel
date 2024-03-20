@@ -23,7 +23,10 @@ import { BookSellersComponent } from './pages/book-sellers/book-sellers.componen
 import { CustomersComponent } from './pages/customers/customers.component';
 import { BookOrdersComponent } from './pages/book-orders/book-orders.component';
 import { UsersComponent } from './pages/users/users.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MatFormFieldControl,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CategoryService } from './services/category.service';
@@ -34,7 +37,7 @@ import { DatePipe } from '@angular/common';
 import { ImagesliderComponent } from './common/components/imageslider/imageslider.component';
 import { LoginComponent } from './components/login/login.component';
 import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
-import { RouterModule } from '@angular/router';
+import { RouterModule, provideRouter } from '@angular/router';
 import { authGuard } from './_auth/auth.guard';
 import { AuthInterceptor } from './_auth/auth.interceptor';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
@@ -74,6 +77,7 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    MatFormFieldModule,
   ],
 
   providers: [
@@ -84,6 +88,19 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
       useClass: AuthInterceptor,
       multi: true,
     },
+    provideRouter([
+      {
+        path: 'seller',
+        loadComponent: () =>
+          import('./standalone_components/seller/seller.component').then(
+            (m) => m.SellerComponent
+          ),
+        loadChildren: () =>
+          import('./standalone_components/seller-register.routes').then(
+            (r) => r.SELLER_ROUTES
+          ),
+      },
+    ]),
   ],
   bootstrap: [AppComponent],
 })
