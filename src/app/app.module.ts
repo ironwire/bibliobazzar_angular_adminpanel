@@ -37,10 +37,15 @@ import { DatePipe } from '@angular/common';
 import { ImagesliderComponent } from './common/components/imageslider/imageslider.component';
 import { LoginComponent } from './components/login/login.component';
 import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
-import { RouterModule, provideRouter } from '@angular/router';
+import {
+  RouterModule,
+  provideRouter,
+  withComponentInputBinding,
+} from '@angular/router';
 import { authGuard } from './_auth/auth.guard';
 import { AuthInterceptor } from './_auth/auth.interceptor';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { SellerVerifyComponent } from './standalone_components/seller-verify/seller-verify.component';
 
 @NgModule({
   declarations: [
@@ -88,19 +93,22 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
       useClass: AuthInterceptor,
       multi: true,
     },
-    provideRouter([
-      {
-        path: 'seller',
-        loadComponent: () =>
-          import('./standalone_components/seller/seller.component').then(
-            (m) => m.SellerComponent
-          ),
-        loadChildren: () =>
-          import('./standalone_components/seller-register.routes').then(
-            (r) => r.SELLER_ROUTES
-          ),
-      },
-    ]),
+    provideRouter(
+      [
+        {
+          path: 'seller',
+          loadComponent: () =>
+            import('./standalone_components/seller/seller.component').then(
+              (m) => m.SellerComponent
+            ),
+          loadChildren: () =>
+            import('./standalone_components/seller-register.routes').then(
+              (r) => r.SELLER_ROUTES
+            ),
+        },
+      ],
+      withComponentInputBinding()
+    ),
   ],
   bootstrap: [AppComponent],
 })

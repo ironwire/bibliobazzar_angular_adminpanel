@@ -1,168 +1,220 @@
-<div class="container mt-3">
-  <div class="card p-2">
+<!-- Form 3 -->
+<div class="form-3-container section-container section-container-image-bg">
+  <div class="container">
     <div class="row">
-      <div class="col-12">
+      <div class="col-md-10 offset-md-1 form-3-box wow fadeInUp">
         <form
           [formGroup]="vendorRegistrationForm"
           novalidate
-          (ngSubmit)="vendorRegister()"
+          (ngSubmit)="vendorRegister(vendorRegistrationForm)"
+          errorTailor
         >
-          <mat-form-field class="w-100" appearance="outline">
-            <mat-label>Business Name: </mat-label>
-            <input
-              matInput
-              placeholder="Business Name of Book Seller"
-              [formControl]="name"
-              name="name"
-            />
-          </mat-form-field>
+          <!-- Business Name & Location  -->
+          <fieldset class="border p-3">
+            <legend class="w-auto px-3">Business Name & Location</legend>
+            <div class="form-group text-left">
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Business Name: </mat-label>
+                <input
+                  type="text"
+                  matInput
+                  required="required"
+                  maxlength="45"
+                  minlength="3"
+                  placeholder="Business Name of Book Seller"
+                  [formControl]="name"
+                  name="name"
+                />
+              </mat-form-field>
 
-          <mat-form-field class="w-100" appearance="outline">
-            <mat-label>Address Line 1: </mat-label>
-            <input
-              matInput
-              placeholder="Address Line 1"
-              appearance="outline"
-              [formControl]="addressLine1"
-              name="addressLine1"
-            />
-          </mat-form-field>
-          <mat-form-field class="w-100" appearance="outline">
-            <mat-label>Address Line 2: </mat-label>
-            <input
-              matInput
-              placeholder="Address Line 2"
-              appearance="outline"
-              [formControl]="addressLine2"
-              name="addressLine2"
-            />
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Country</mat-label>
-            <mat-select
-              [formControl]="country"
-              name="country"
-              [errorStateMatcher]="matcher"
-            >
-              <mat-option
-                *ngFor="let country of countries"
-                [value]="country.shortName"
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Address Line 1: </mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Address Line 1"
+                  appearance="outline"
+                  [formControl]="addressLine1"
+                  name="addressLine1"
+                />
+              </mat-form-field>
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Address Line 2: </mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Address Line 2"
+                  appearance="outline"
+                  [formControl]="addressLine2"
+                  name="addressLine2"
+                />
+              </mat-form-field>
+              <div fxLayoutAlign="space-between">
+                <mat-form-field appearance="outline">
+                  <mat-label>Country</mat-label>
+                  <mat-select
+                    class="select"
+                    [formControl]="country"
+                    name="country"
+                    [errorStateMatcher]="matcher"
+                  >
+                    <mat-option
+                      *ngFor="let country of countries"
+                      [value]="country.shortName"
+                    >
+                      {{ country.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="country.hasError('required')"
+                    >Please select a country.</mat-error
+                  >
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>State</mat-label>
+                  <mat-select
+                    class="select"
+                    [formControl]="state"
+                    name="state"
+                    [errorStateMatcher]="matcher"
+                  >
+                    <mat-option *ngFor="let state of states" [value]="state">
+                      {{ state }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="state.hasError('required')"
+                    >Please select a state.</mat-error
+                  >
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>City</mat-label>
+                  <mat-select
+                    class="select"
+                    [formControl]="city"
+                    name="city"
+                    [errorStateMatcher]="matcher"
+                  >
+                    <mat-option *ngFor="let city of cities" [value]="city">
+                      {{ city }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="city.hasError('required')"
+                    >Please select a city.</mat-error
+                  >
+                </mat-form-field>
+                <mat-form-field
+                  style="margin-left: 2%"
+                  class="w-48"
+                  appearance="outline"
+                >
+                  <mat-label>Postal Code</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="Postal Code"
+                    [formControl]="postalCode"
+                    name="postalCode"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </fieldset>
+          <!-- Your Address  -->
+          <fieldset class="form-group p-3">
+            <legend class="w-auto px-2">Contact Information</legend>
+            <div fxLayoutAlign="space-between">
+              <mat-form-field
+                style="margin-right: 2%"
+                class="w-100"
+                appearance="outline"
               >
-                {{ country.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="country.hasError('required')"
-              >Please select a country.</mat-error
-            >
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>State</mat-label>
-            <mat-select
-              [formControl]="state"
-              name="state"
-              [errorStateMatcher]="matcher"
-            >
-              <mat-option *ngFor="let state of states" [value]="state">
-                {{ state }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="state.hasError('required')"
-              >Please select a state.</mat-error
-            >
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>City</mat-label>
-            <mat-select
-              [formControl]="city"
-              name="city"
-              [errorStateMatcher]="matcher"
-            >
-              <mat-option *ngFor="let city of cities" [value]="city">
-                {{ city }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="city.hasError('required')"
-              >Please select a city.</mat-error
-            >
-          </mat-form-field>
-          <mat-form-field
-            style="margin-left: 2%"
-            class="w-48"
-            appearance="outline"
-          >
-            <mat-label>Postal Code</mat-label>
-            <input
-              matInput
-              placeholder="Postal Code"
-              [formControl]="postalCode"
-              name="postalCode"
-            />
-          </mat-form-field>
-          <mat-form-field
-            style="margin-right: 2%"
-            class="w-48"
-            appearance="outline"
-          >
-            <mat-label>First Name: </mat-label>
-            <input
-              matInput
-              placeholder="First Name"
-              [formControl]="firstName"
-              name="firstName"
-            />
-          </mat-form-field>
-          <mat-form-field
-            style="margin-left: 2%"
-            class="w-48"
-            appearance="outline"
-          >
-            <mat-label>Last Name</mat-label>
-            <input
-              matInput
-              placeholder="Last Name"
-              [formControl]="lastName"
-              name="lastName"
-            />
-          </mat-form-field>
-
-          <mat-form-field
-            style="margin-left: 2%"
-            class="w-48"
-            appearance="outline"
-          >
-            <mat-label>Phone Number:</mat-label>
-            <input
-              matInput
-              placeholder="Phone Number"
-              [formControl]="phoneNumber"
-              name="phoneNumber"
-            />
-          </mat-form-field>
-          <mat-form-field
-            style="margin-left: 2%"
-            class="w-48"
-            appearance="outline"
-          >
-            <mat-label>Email:</mat-label>
-            <input
-              matInput
-              placeholder="email address"
-              [formControl]="email"
-              name="email"
-            />
-          </mat-form-field>
-          <div align="end">
-            <button
-              mat-stroked-button
-              color="primary"
-              style="margin-right: 3px"
-            >
-              Clear
-            </button>
-            <button mat-stroked-button color="primary" type="submit">
-              Add Book
-            </button>
+                <mat-label>First Name: </mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="First Name"
+                  [formControl]="firstName"
+                  name="firstName"
+                />
+              </mat-form-field>
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Last Name</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Last Name"
+                  [formControl]="lastName"
+                  name="lastName"
+                />
+              </mat-form-field>
+            </div>
+            <div fxLayoutAlign="space-between">
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Phone Number:</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Phone Number"
+                  [formControl]="phoneNumber"
+                  name="phoneNumber"
+                />
+              </mat-form-field>
+              <mat-form-field
+                style="margin-left: 2%"
+                class="w-100"
+                appearance="outline"
+              >
+                <mat-label>Email (as login account):</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="email address"
+                  [formControl]="email"
+                  name="email"
+                />
+              </mat-form-field>
+            </div>
+          </fieldset>
+          <fieldset class="form-group p-3">
+            <legend class="w-auto px-2">Contact Information</legend>
+            <div fxLayoutAlign="space-between">
+              <mat-form-field
+                style="margin-right: 2%"
+                class="w-100"
+                appearance="outline"
+              >
+                <mat-label>Password: </mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="password"
+                  formControlName="password"
+                  [formControl]="password"
+                  name="password"
+                />
+              </mat-form-field>
+              <mat-form-field
+                style="margin-right: 2%"
+                class="w-100"
+                appearance="outline"
+              >
+                <mat-label>Confirm Password: </mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Confirm Password"
+                  [formControl]="confirmPassword"
+                  name="confirmPassword"
+                />
+              </mat-form-field>
+            </div>
+          </fieldset>
+          <!-- Submit Button  -->
+          <div class="form-group row">
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-customized">
+                Send Registration
+              </button>
+            </div>
           </div>
         </form>
       </div>

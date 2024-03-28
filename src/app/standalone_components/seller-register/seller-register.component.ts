@@ -19,6 +19,11 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { StoreService } from '../../services/store.service';
+import { Store } from '../../common/store';
+import { isPasswordMatch } from './password.matchFn';
+import { autofocus } from '../../common/functions/control.focus';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -46,6 +51,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     CommonModule,
     MatFormFieldModule,
     MatInputModule,
+    FlexLayoutModule,
   ],
   templateUrl: './seller-register.component.html',
   styleUrl: './seller-register.component.css',
@@ -54,14 +60,10 @@ export class SellerRegisterComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   constructor(
     private fb: FormBuilder,
-    private locService: RegisterLocationService
+    private locService: RegisterLocationService,
+    private storeService: StoreService
   ) {
     this.countries = this.locService.getCountries();
-    this.vendorRegistrationForm.patchValue({
-      country: this.country,
-      state: this.state,
-      city: this.city,
-    });
   }
   ngOnInit(): void {
     this.country.valueChanges.subscribe((country) => {
@@ -91,13 +93,9 @@ export class SellerRegisterComponent implements OnInit {
   states: string[];
   cities: string[];
 
-  country = new FormControl(null, [Validators.required]);
-  state = new FormControl({ value: null, disabled: true }, [
-    Validators.required,
-  ]);
-  city = new FormControl({ value: null, disabled: true }, [
-    Validators.required,
-  ]);
+  country = new FormControl('', [Validators.required]);
+  state = new FormControl('', [Validators.required]);
+  city = new FormControl('', [Validators.required]);
 
   name = new FormControl('', [
     Validators.required,
@@ -132,6 +130,16 @@ export class SellerRegisterComponent implements OnInit {
     Validators.minLength(8),
     Validators.maxLength(15),
   ]);
+  password = new FormControl('', [
+    Validators.required,
+    Validators.minLength(8),
+    Validators.maxLength(15),
+  ]);
+  confirmPassword = new FormControl('', [
+    Validators.required,
+    Validators.minLength(8),
+    Validators.maxLength(15),
+  ]);
   email = new FormControl('', [Validators.required, Validators.email]);
 
   vendorRegistrationForm = this.fb.group({
@@ -149,7 +157,41 @@ export class SellerRegisterComponent implements OnInit {
     phoneNumber: this.phoneNumber,
 
     email: this.email,
+    password: this.password,
   });
 
-  vendorRegister() {}
+  vendorRegister(vendorRegistrationForm) {
+    console.log(vendorRegistrationForm.value);
+
+    if (!isPasswordMatch(this.password, this.confirmPassword)) {
+      alert('Password and Confirm Password Your entered are different.');
+      autofocus('password');
+      return;
+    }
+    console.log(vendorRegistrationForm.value.email);
+    this.storeService
+      .isEmailUnique(vendorRegistrationForm.value.email)
+      .subscribe({
+        next: (data: boolean) => {
+          console.log(data);
+          if (data === false) {
+            alert(
+              'The same email address is already registered. You need to choose another one.'
+            );
+            autofocus('email');
+            return;
+          } else {
+            this.storeService
+              .registerStore(vendorRegistrationForm.value)
+              .subscribe({
+                next: (data: Store) => {
+                  console.log(data);
+                },
+                error: (e) => console.error(e),
+                complete: () => console.info('complete'),
+              });
+          }
+        },
+      });
+  }
 }

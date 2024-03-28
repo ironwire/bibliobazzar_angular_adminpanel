@@ -1,14 +1,18 @@
-<mat-toolbar color="primary">
+<mat-toolbar
+  color="primary"
+  (scroll)="onscroll()"
+  [ngClass]="navbarfixed ? 'fixed' : 'nofixed'"
+>
   <button
+    *ngIf="!isLoggedIn()"
     class="btn btn-secondary m-3"
     mat-raised-button
     routerLink="./seller_register"
-    (scroll)="onscroll()"
-    [ngClass]="navbarfixed ? 'fixed' : 'nofixed'"
   >
     Seller Register
   </button>
   <button
+    *ngIf="isLoggedIn()"
     class="btn btn-secondary"
     mat-raised-button
     routerLink="./seller_update"

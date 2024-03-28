@@ -32,6 +32,16 @@ export class UserAuthService {
   }
 
   public isLoggedIn() {
+    // console.log(this.getRoles(), this.getToken());
+    // console.log(this.getRoles() && this.getToken());
     return this.getRoles() && this.getToken(); // && !this.isTokenExpired();
+  }
+
+  public isAdminRole() {
+    return this.getRoles().find((x) => JSON.stringify(x).includes('Admin'));
+  }
+
+  public isSellerRole() {
+    return this.getRoles().find((x) => JSON.stringify(x).includes('Seller'));
   }
 }

@@ -1,6 +1,7 @@
 import { Component, Input, computed, signal } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatIcon } from '@angular/material/icon';
+import { UserAuthService } from '../../services/user-auth.service';
 
 export type MenuItem = {
   icon: string;
@@ -18,6 +19,8 @@ export class CustomSidenavComponent {
   @Input() set collapsed(val: boolean) {
     this.sideNavCollapsed.set(val);
   }
+
+  constructor(private userAuthService: UserAuthService) {}
 
   menuItems = signal<MenuItem[]>([
     {
@@ -57,5 +60,21 @@ export class CustomSidenavComponent {
     // },
   ]);
 
+  sellerMenuItems = signal<MenuItem[]>([
+    {
+      icon: 'seller',
+      label: 'Store Admin',
+      route: 'seller',
+    },
+  ]);
+
   profilePicSize = computed(() => (this.sideNavCollapsed() ? '32' : '100'));
+
+  isAdminRole() {
+    return this.userAuthService.isAdminRole();
+  }
+
+  isSellerRole() {
+    return this.userAuthService.isSellerRole();
+  }
 }
